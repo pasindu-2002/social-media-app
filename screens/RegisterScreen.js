@@ -17,20 +17,21 @@ import { useNavigation } from "@react-navigation/native";
 const RegisterScreen = () => {
 
     const navigation = useNavigation();
+
     const [secureEntery, setSecureEntery] = useState(true);
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [image, setImage] = useState("");
-    const [tele, setTele] = useState(0);
+    const [tele, setTele] = useState("");
 
     const handleGoBack = () => {
         navigation.goBack();
     };
 
     const handleLogin = () => {
-        navigation.navigate("Home");
+        navigation.navigate("Login");
     };
 
     return (
@@ -122,10 +123,9 @@ const RegisterScreen = () => {
                         value={image}
                         onChangeText={(text) => setImage(text)}
                         style={styles.textInput}
-                        placeholder="Enter your phone no"
+                        placeholder="Upload your image"
                         placeholderTextColor={colors.secondary}
                         secureTextEntry={secureEntery}
-                        keyboardType="phone-pad"
                     />
                 </View>
 
