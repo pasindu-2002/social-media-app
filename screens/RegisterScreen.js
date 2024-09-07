@@ -1,4 +1,5 @@
 import {
+    Alert,
     Image,
     StyleSheet,
     Text,
@@ -9,6 +10,7 @@ import {
 import React, { useState } from "react";
 import { colors } from "../utils/colors";
 import { fonts } from "../utils/fonts";
+import axios from 'axios';
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
@@ -32,6 +34,38 @@ const RegisterScreen = () => {
 
     const handleLogin = () => {
         navigation.navigate("Login");
+    };
+
+    const handleRegister = () => {
+        const user = {
+            name: name,
+            email: email,
+            tele: tele,
+            password: password,
+            image: image
+        }
+
+        // Send a POST request to the backend API to register the user 
+        axios.post("http://192.168.1.227:8000/register", user).then((response) => {
+            console.log(response);
+            Alert.alert(
+                "Resitration successfull",
+                    "You have ben registered Successfully"
+            );
+
+            setName("");
+            setEmail("");
+            setTele("");
+            setPassword("");
+            setImage("");
+        }).catch((error) => {
+            Alert.alert(
+                "Registration Error",
+                "An error occurred while registring;"
+            );
+
+            console.log("registration failed", error)
+        })
     };
 
     return (
@@ -61,7 +95,6 @@ const RegisterScreen = () => {
                         style={styles.textInput}
                         placeholder="Enter your name"
                         placeholderTextColor={colors.secondary}
-                        keyboardType="email-address"
                     />
                 </View>
 
@@ -125,11 +158,11 @@ const RegisterScreen = () => {
                         style={styles.textInput}
                         placeholder="Upload your image"
                         placeholderTextColor={colors.secondary}
-                        secureTextEntry={secureEntery}
+                        
                     />
                 </View>
 
-                <TouchableOpacity style={styles.loginButtonWrapper}>
+                <TouchableOpacity onPress={handleRegister} style={styles.loginButtonWrapper}>
                     <Text style={styles.loginText}>Sign up</Text>
                 </TouchableOpacity>
 

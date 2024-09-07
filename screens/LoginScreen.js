@@ -1,4 +1,5 @@
 import {
+    Alert,
     Image,
     StyleSheet,
     Text,
@@ -6,7 +7,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colors } from "../utils/colors";
 import { fonts } from "../utils/fonts";
 
@@ -14,6 +15,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { useNavigation } from "@react-navigation/native";
 import StackNavigation from "../StackNavigator";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -31,20 +34,57 @@ const LoginScreen = () => {
         navigation.goBack();
     };
 
+    useEffect(() => {
+        const checkLoginScreen = async () => {
+            try {
+                const token = await AsyncStorage.getItem("authToken")
+                if (token) {
+                    navigation.replace("Main");
+                }
+                else {
+                    //token not found, sow the login screen itself
+
+                }
+            } catch (error) {
+                console.log("error", error)
+            }
+        };
+
+        checkLoginScreen();
+
+    }, []);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const handleLogin = () => {
+        const user = {
+            email: email,
+            password: password
+        }
+
+        axios.post("http://192.168.1.227:8000/login", user).then((response) => {
+            console.log(response);
+            const token = response.data.token;
+            AsyncStorage.setItem("authToken", token);
+            navigation.navigate("Main");
+        }).catch((error) => {
+            Alert.alert("Login Error", "Invalid email or password");
+            console.log("Login Error", error);
+        })
+    };
 
 
     return (
         <View style={styles.container}>
 
-        <TouchableOpacity style={styles.backButtonWrapper} onPress={handleGoBack}>
+            <TouchableOpacity style={styles.backButtonWrapper} onPress={handleGoBack}>
                 <Ionicons
-                name={"arrow-back-outline"}
-                color={colors.primary}
-                size={25}
+                    name={"arrow-back-outline"}
+                    color={colors.primary}
+                    size={25}
                 />
-        </TouchableOpacity>
+            </TouchableOpacity>
 
             <View style={styles.textContainer}>
                 <Text style={styles.headingText}>Hey,</Text>
@@ -92,7 +132,7 @@ const LoginScreen = () => {
                     <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.loginButtonWrapper}>
+                <TouchableOpacity onPress={handleLogin} style={styles.loginButtonWrapper}>
                     <Text style={styles.loginText}>Login</Text>
                 </TouchableOpacity>
 
@@ -142,7 +182,7 @@ const styles = StyleSheet.create({
         fontSize: 32,
         color: colors.myColor,
         fontFamily: fonts.SemiBold,
-        fontWeight:"600"
+        fontWeight: "600"
     },
     formContainer: {
         marginTop: 20,

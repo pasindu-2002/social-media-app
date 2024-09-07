@@ -4,10 +4,10 @@
     "slug": "social-media-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/chat-app-logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-1.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

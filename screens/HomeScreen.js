@@ -16,7 +16,7 @@ const HomeScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Image source={require("../assets/logo.png")} style={styles.logo} />
+      <Image source={require("../assets/chat-app-logo.png")} style={styles.logo} />
       <Image source={require("../assets/man.png")} style={styles.bannerImage} />
       <Text style={styles.title}>Lorem ipsum dolor.</Text>
       <Text style={styles.subTitle}>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent:"center"
   },
   logo: {
-    height: 40,
+    height: 110,
     width: 140,
     marginVertical: 30,
   },
