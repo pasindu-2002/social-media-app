@@ -67,6 +67,7 @@ const createToken = (userId) => {
   };
 
 
+
 //endpoint for loging in of user
 app.post("/login",(req,res) => {
     const {email,password} = req.body;
@@ -83,7 +84,7 @@ app.post("/login",(req,res) => {
             return res.status(404).json({massege:"USer not Found"})
         }
 
-        //Compare password into database  password
+        //Compare password into database password
         if(user.password != password){
             return res.status(404).json({message: "Invalid Password!"})
         }
@@ -95,3 +96,18 @@ app.post("/login",(req,res) => {
         res.status(500).json({massege: "Internal server Error!"});
     })
 }) 
+
+
+//endponit to access the users expet the user who's is currently logged in?
+app.get("/users/:userId", (req, res) => {
+    const loggedInUserId = req.params.userId;
+  
+    User.find({ _id: { $ne: loggedInUserId } })
+      .then((users) => {
+        res.status(200).json(users);
+      })
+      .catch((err) => {
+        console.log("Error retrieving users", err);
+        res.status(500).json({ message: "Error retrieving users" });
+      });
+  });
